@@ -14,7 +14,7 @@ class StocksScreen extends StatefulWidget {
 }
 
 class StocksScreenState extends State<StocksScreen> {
-  int _value = 0;
+  int _value = 1;
   String intervalValue = "";
 
   Future<List<Stock>> _getStocks(BuildContext context) async {
@@ -111,8 +111,6 @@ class StocksScreenState extends State<StocksScreen> {
                                     child: SfCartesianChart(
                                       backgroundColor: Colors.white,
                                       primaryXAxis: DateTimeAxis(
-                                        // visibleMinimum: DateTime(2016, 01, 8),
-                                        // visibleMaximum: DateTime(2016, 03, 16),
                                         edgeLabelPlacement:
                                             EdgeLabelPlacement.shift,
                                         intervalType: intervalValue == "1d"

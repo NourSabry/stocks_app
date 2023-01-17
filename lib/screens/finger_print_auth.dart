@@ -6,6 +6,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:stocks_app/colors.dart';
 import 'package:stocks_app/screens/stocks_screen.dart';
 import 'package:stocks_app/widgets/custom_appBar.dart';
+import 'package:stocks_app/widgets/custom_button.dart';
 
 class FingerprintAuth extends StatefulWidget {
   @override
@@ -22,7 +23,9 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
     try {
       authenticated = await auth.authenticateWithBiometrics(
         localizedReason: "Scan your finger to authenticate",
+        //to tell the user within he entered the correct or the wrong fingerprint
         useErrorDialogs: true,
+        //to keep the user authenticated if he leaves the app and came back again
         stickyAuth: true,
       );
     } on PlatformException catch (e) {
@@ -36,36 +39,13 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
     });
 
     if (authenticated) {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => StocksScreen()));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => StocksScreen(),
+        ),
+      );
     }
     return;
-  }
-
-  Future<void> _checkBiometric() async {
-    try {} on PlatformException catch (e) {
-      print(e);
-    }
-
-    if (!mounted) return;
-
-    setState(() {});
-  }
-
-  Future _getAvailableBiometric() async {
-    try {} on PlatformException catch (e) {
-      print(e);
-    }
-
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _checkBiometric();
-    _getAvailableBiometric();
-
-    super.initState();
   }
 
   @override
@@ -80,9 +60,11 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Center(
+            const Align(
+              alignment: Alignment.centerLeft,
               child: Text(
-                "identify yourself",
+                "identify\n yourself",
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 48.0,
@@ -90,45 +72,35 @@ class _FingerprintAuthState extends State<FingerprintAuth> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 50.0),
-              child: Column(
-                children: [
-                  Image.asset(
-                    "assets/images/fingerprint.png",
-                    width: 120.0,
+            const SizedBox(height: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/fingerprint.png",
+                  width: 120.0,
+                ),
+                const Text(
+                  "Fingerprint Auth",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const Text(
-                    "Fingerprint Auth",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 30),
+                  child: Text(
+                    "please authenticate yourself to be able to continue",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: textColor, height: 1.5),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: Text(
-                      "please authenticate yourself to be able to continue",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: textColor, height: 1.5),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _authenticate,
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      backgroundColor: dividerColor,
-                    ),
-                    child: const Text(
-                      "Authenticate",
-                      style: TextStyle(color: textColor),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                CustomElevatedButton(
+                  function: _authenticate,
+                  title: "Authenticate",
+                ),
+              ],
             ),
           ],
         ),
